@@ -1,0 +1,22 @@
+1-//SessionFilter - it is a class which object holds the session cookies which can be used for next test cases for authntication
+		SessionFilter session = new SessionFilter();
+2-JsonPath js=new JsonPath(addCommentResponse);
+  it holds complete string and can be used to get path of it.
+3-
+given().header("X-Atlassian-Token","no-check").filter(session).pathParam("key", "10001")
+		.header("Content-Type","multipart/form-data")//header is in curl format
+		.multiPart("file",new File("text.txt"))
+
+		//created a file object and as text.txt is on project level no need to provide path
+		//multiPart method used to send files to attachments
+		.when().
+		post("rest/api/2/issue/{key}/attachments").then().log().all().assertThat().statusCode(200);
+		
+4-most used import statement
+import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
+
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
+
+import org.testng.Assert;
