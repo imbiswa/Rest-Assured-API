@@ -61,18 +61,11 @@ public class JiraTest {
 		
 		JsonPath js=new JsonPath(addCommentResponse);
 		String commentId=js.getString("id");
+		int cmntd=	js.getInt("Id");
 		
-		/*given().pathParam("key", 10001).log().all().header("Content-Type","application/json")
+		//Delete Comment
 		
-		.body("{\r\n"
-				+ "    \"body\": \"hey going to add another comment through rest Assured to delete this.\",\r\n"
-				+ "    \"visibility\": {\r\n"
-				+ "        \"type\": \"role\",\r\n"
-				+ "        \"value\": \"Administrators\"\r\n"
-				+ "    }\r\n"
-				+ "}").filter(session)
-		.when().log().all().delete("rest/api/2/issue/10001/comment/10202")
-		.then().log().all().assertThat().statusCode(202);*/
+		
 		
 		//Add Attachement
 		
@@ -87,13 +80,14 @@ public class JiraTest {
 		//get issues
 		
 		//path Parameter
-		//String issueDeails=given().filter(session).pathParam("key", "10001").when().get("rest/api/2/issue/{key}")
-		//.then().log().all().extract().response().asString();
+		String issueDeails=given().filter(session).pathParam("key", "10001").when().get("rest/api/2/issue/{key}")
+		.then().log().all().extract().response().asString();
 		
-	//	System.out.println(issueDeails);
+	     System.out.println(issueDeails);
 		//query para meter
-		String fetchingSingleValue=given().filter(session).pathParam("key", "10001").queryParam("fields", "comment").when().get("rest/api/2/issue/{key}")
-				.then().log().all().extract().response().asString();
+		String fetchingSingleValue=given().filter(session).pathParam("key", "10001").
+		queryParam("fields", "comment").when().get("rest/api/2/issue/{key}")
+		.then().log().all().extract().response().asString();
 		System.out.println(fetchingSingleValue);
 		
 		JsonPath js1 =new JsonPath(fetchingSingleValue);
@@ -107,9 +101,34 @@ public class JiraTest {
 				String messsage=js1.get("fields.comment.comments["+i+"].body").toString();
 				System.out.println(messsage);
 				Assert.assertEquals(messsage, expectedmessage);
+				
+				
+			
 			}
 			
 		}
+		
+		String deletethis=given().filter(session).pathParam("key", "10001").when().get("rest/api/2/issue/{key}/comment")
+				.then().log().all().extract().response().asString();
+		
+		
+		JsonPath jsd= new JsonPath(deletethis);
+		
+		int commentid=jsd.get();
+		String DeleteDetails=given().filter(session).pathParam("key", "10001").
+				when().delete("rest/api/2/issue/{key}/comment/{commentid}")
+					.then().log().all().extract().response().asString();
+				
+				System.out.println(DeleteDetails);
+		
+		
+		
+	
+		
+			
+			
+		
+		
 		}
 
 }

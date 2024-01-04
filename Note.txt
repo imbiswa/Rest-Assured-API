@@ -20,3 +20,253 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 import org.testng.Assert;
+
+
+5-OAth 2.0 - 
+
+
+grant types
+Client credential -Client id , Client secrete two parameters required
+password - User name and Password
+
+
+demo to practice:
+API Contract download
+******************************************************************
+
+Authorization Server EndPoint:
+
+https://rahulshettyacademy.com/oauthapi/oauth2/resourceOwner/token
+
+
+
+HTTP Method : POST
+
+
+
+Form parameters : follwing 4 para meters will be placed under body as form format 
+
+
+
+client_id:
+
+692183103107-p0m7ent2hk7suguv4vq22hjcfhcr43pj.apps.googleusercontent.com
+
+client_secret:  erZOWM9g3UtwNRj340YYaK_W
+
+grant_type:   client_credentials
+
+scope:  trust
+
+******************************************************************
+
+
+
+GetCourseDetails EndPoint (Secured by OAuth) :
+
+https://rahulshettyacademy.com/oauthapi/getCourseDetails
+HTTP Method : GET
+
+Query Parameter : access_token
+
+
+
+
+POJO - Plain object java object
+
+Serialization :
+converting java object into request body
+
+DeSerialization :
+converting response body back to java object
+
+
+
+
+
+
+
+
+
+Questions:
+1. Explain what REST Assured is.
+REST Assured is a Java library that offers programmers a domain-specific language (DSL) to write maintainable, robust tests for RESTful APIs. It is widely used to test web applications based on JSON and XML. Additionally, it supports all methods, including GET, DELETE, PUT, POST, and PATCH.
+
+2. And what is REST?
+REST is an acronym for "representational state transfer." It's a design pattern or architectural style for APIs. A RESTful web application reveals information about itself as resource information.
+
+3. And what is JSON?
+It is a text-based standard used to describe structured data based on JavaScript object syntax. JSON is frequently used in web applications to send data to clients and servers.
+
+4. Which protocol does RESTful Web Services use?
+RESTful web services use the HTTP protocol to communicate between the client and the server.
+5. Define “client-server architecture.”
+The client-server architectural model defines how a server allocates resources and services to one or more clients. Server examples include web servers, mail servers, and file servers. So, the server carries out the request when the client requests a resource.
+
+6. Define a resource in REST.
+The REST architecture treats any content as a resource. This content includes HTML pages, text files, images, videos, or dynamic business information. A REST Server gives users access to these resources and modifies them, and URIs or global IDs identify each resource.
+
+7. Explain REST Assured method chaining.
+In the context of object-oriented programming languages, method chaining is an often-used syntax for invoking any number of method calls. Each method returns an object, so multiple calls can be chained together in a single line. This characteristic means that variables aren’t needed to hold interim results.
+
+8. Why would a programmer use REST Assured to automate RESTful services instead of Postman?
+Because REST Assured can customize reports, Postman can't do this. Additionally, since REST Assured is a Java client, you can reuse code, which Postman doesn’t allow. Finally, REST Assured has no restrictions on data file submission for collections, whereas Postman is limited to one data file.
+
+9. What is the request specification?
+Request specification in REST Assured is used to group common request specs and change them into a single object. This interface has the means to define the base URL, headers, base path, and other parameters. You must use the given() function of the REST Assured class to obtain a reference for the Request specification.
+
+10. How do you initiate request specification in REST Assured?
+Here is the syntax:
+
+RequestSpecification reqSpec = RestAssured.given();
+
+reqSpec.baseUri("http://localhost:8080")
+
+reqSpec.basePath("/employees");
+
+All codes courtesy of Techgeek.
+
+11. How do you perform chaining in REST Assured?
+In the context of object-oriented programming languages, method chaining is used to invoke multiple method calls. Each method returns an object, which allows multiple calls to be chained into a single line that doesn’t require variables to hold interim results.
+
+In REST Assured, it looks like this:
+
+    given()
+
+           .baseUri(baseUri)
+
+           .queryParam(parameterName, parameterValues)
+
+           .accept(contentType).
+
+           .when()
+
+           .then();
+         12. Write a code that tests REST API using REST Assured.
+Here’s the solution:
+
+import org.testng.annotations.Test;
+
+import io.restassured.RestAssured;
+
+import io.restassured.http.Method;
+
+import io.restassured.response.Response;
+
+import io.restassured.specification.RequestSpecification;
+
+public class EmployeesTest {
+
+    @Test
+
+    public void GetAllEmoloyees()
+
+    {
+
+           // base URL to call
+
+           RestAssured.baseURI = "http://localhost:8080/employees/get"; 
+
+           //Provide HTTP method type - GET, and URL to get all employees
+
+           //This will give respose
+
+           Response employeesResponse = RestAssured.given().request(Method.GET, "/all"); 
+
+           // Print the response in string format
+
+    System.out.println(employeesResponse.getBody().asString());
+
+ 
+
+    }
+
+}
+
+13. When using REST Assured, what’s the best method of keeping sensitive data out of the log?
+Use a blacklist to prevent sensitive data from appearing in the log. Here’s how:
+
+Set<String> headers = new HashSet<String>();
+
+headers.add("X-REGION");
+
+headers.add("content-type");
+
+given().
+
+baseUri("http://localhost:8080").
+
+header("X-REGION", "NAM").
+
+// blacklist headers
+
+config(
+
+config.logConfig(LogConfig.logConfig().blacklistHeaders(headers)))
+
+// blacklist multiple headers
+
+//config(config().logConfig(LogConfig.logConfig().blacklistHeader("Accept","set-cookie"))).
+
+log().all().
+
+when().
+
+get("/employees").
+
+then().
+
+assertThat().
+
+statusCode(200);
+
+         14. What is a jsonPath in the context of REST Assured?
+A JsonPath (io.restassured.path.json.JsonPath) is an easy way to get values from an Object document without resorting to XPath. It conforms to the Groovy GPath syntax when it retrieves an object from a document. Consider it a JSON-specific version of XPath. Here’s an example:
+
+{ "company": {
+
+   "employee": [
+
+{ "id": 1,
+
+   "name": "TechGeekNextUser1",
+
+   "role": "Admin"
+
+},
+
+{ "id": 2,
+
+   "name": "TechGeekNextUser2",
+
+   "role": "User"
+
+},
+
+{ "id": 3,
+
+   "name": "TechGeekNextUser3",
+
+   "role": "User"
+
+}
+
+  ]
+
+  }
+
+ }
+
+Response employeesResponse = RestAssured.given().request(Method.GET, "/all");
+
+JsonPath jsonPathObj = employeesResponse.jsonPath();
+
+//get a list of all employees id:
+
+List<String> employeeIds = jsonPathObj.get("company.employee.id");
+
+//get the first employee name:
+
+String empName = jsonPathObj.get("company.employee[0].name");
+
+         
