@@ -37,7 +37,7 @@ public class JiraTest {
 		
 		String response=given().header("Content-Type","application/json").body("{\r\n"
 				+ "     \"username\": \"BiswajitMallick\",\r\n"
-				+ "      \"password\": \"B@9583629994b\"\r\n"
+				+ "      \"password\": \"**********\"\r\n"
 				+ " }").log().all().filter(session).when().post("rest/auth/1/session").then().log().all().assertThat()
 				.statusCode(200).extract().response().asString();
 		System.out.println(response);
